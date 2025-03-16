@@ -144,4 +144,5 @@ Initial conceptual ERD
 <br>
 
 Replaced many-to-many with a bridge table (composite entity)
+
 <img src = "../assets/bookly_ex0_2_2.png" width=500>
