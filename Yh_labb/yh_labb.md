@@ -2,7 +2,7 @@
 
 This document describes the process of designing a database model for YrkesCo. It includes multiple data models along with detailed explanations.
 
-
+## Table of contents
 - [Business requirements](#business-requirements)
 - [Conceptual model](#conceptual-model)
 - [Relationships statements for each entity](#relationships-statements-for-each-entity)
