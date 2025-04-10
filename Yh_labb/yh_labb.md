@@ -69,4 +69,6 @@ This document describes the process of designing a database model for YrkesCo. I
 
 # Physical model
 
+<img src = "./yh_labb_assets/physical_diagram.png" width=500>
+
 # Arguing for normalisation
