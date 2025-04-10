@@ -40,7 +40,32 @@ This document describes the process of designing a database model for YrkesCo. I
 
 # Relationships statements for each entity
 
+- A `student` is enrolled in one `class`
+- A `student` has exactly one associated `studentInformation` containing sensitive personal data
+- A `class` has many `students`
+- A `class` belongs to one `program`
+- A `class` is managed by one `educational leader`
+- A `class` is connected to `multiple` courses through `ClassCourse`
+- An `educational leader` can be `responsible` for up to `three classes`
+- A `program `includes multiple `classes`
+- A `program` can have several `courses`
+- A `course` can be part of multiple programs.
+- A `course` can be given in `multiple classes` via `ClassCourse`
+- A `course` can be taught by multiple educators through EducationalCourse.
+- A `ProgramCourse`connects programs to their respective `courses`
+- `ClassCourse` links classes to the `courses` they take.
+- Each `ClassCourse` is taught by one `educator`
+- A `campus` can host multiple `classes`
+- An `educator` can teach many courses through `EducationalCourse`
+- An `educator`can be assigned to `multiple ClassCourses`
+- An `educator` can be a `consultant`
+- `EducationalCourse` connects `educators` to the `courses` they are qualified to teach.
+- A `consultant` can also be an `educator`
+- A `consultant company` can employ multiple `consultants`
+
 # Logical model
+
+<img src = "./yh_labb_assets/logical_diagram.png" width=500>
 
 # Physical model
 
