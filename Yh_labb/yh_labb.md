@@ -36,6 +36,8 @@ This document describes the process of designing a database model for YrkesCo. I
 
 # Conceptual model
 
+<img src = "./yh_labb_assets/conceptual_diagram.png" width=500>
+
 # Relationships statements for each entity
 
 # Logical model
