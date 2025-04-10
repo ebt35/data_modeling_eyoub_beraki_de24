@@ -1,0 +1,98 @@
+Table educational_leader {
+  edu_leader_id SERIAL [primary key]
+  first_name VARCHAR(50) [not null]
+  last_name VARCHAR(50) [not null]
+  email VARCHAR(255) [not null, unique]
+  phone VARCHAR(20)
+}
+
+Table campus {
+  campus_id SERIAL [primary key]
+  name VARCHAR(100) [not null]
+  address VARCHAR(100)
+  city VARCHAR(100)
+}
+
+Table program {
+  program_id SERIAL [primary key]
+  program_name VARCHAR(100) [not null]
+  description VARCHAR(255)
+}
+
+Table course {
+  course_id SERIAL [primary key]
+  course_name VARCHAR(100) [not null]
+  course_code VARCHAR(20) [not null]
+  credits INTEGER [not null]
+  description VARCHAR(255)
+}
+
+Table educator {
+  educator_id SERIAL [primary key]
+  first_name VARCHAR(50) [not null]
+  last_name VARCHAR(50) [not null]
+  email VARCHAR(255) [not null, unique]
+  phone VARCHAR(20)
+}
+
+Table class {
+  class_id SERIAL [primary key]
+  program_id INT [not null, ref: > program.program_id]
+  campus_id INT [not null, ref: > campus.campus_id]
+  educational_leader_id INT [not null, ref: > educational_leader.edu_leader_id]
+}
+
+Table student {
+  student_id SERIAL [primary key]
+  class_id INT [not null, ref: > class.class_id]
+  first_name VARCHAR(50) [not null]
+  last_name VARCHAR(50) [not null]
+  email VARCHAR(255) [not null, unique]
+}
+
+Table student_info {
+  student_id INT [primary key, ref: > student.student_id]
+  social_security_number VARCHAR(12)
+}
+
+Table consultant_company {
+  consultant_company_id SERIAL [primary key]
+  name VARCHAR(100) [not null]
+  org_number VARCHAR(50) [not null]
+  tax_status BOOLEAN
+  hourly_rate NUMERIC
+  address VARCHAR(100)
+}
+
+Table consultant {
+  consultant_id INT [primary key, ref: > educator.educator_id]
+  consultant_company_id INT [not null, ref: > consultant_company.consultant_company_id]
+}
+
+
+Table program_course {
+  program_id INT [not null, ref: > program.program_id]
+  course_id INT [not null, ref: > course.course_id]
+
+  indexes {
+    (program_id, course_id) [pk]
+  }
+}
+
+Table educational_course {
+  educator_id INT [not null, ref: > educator.educator_id]
+  course_id INT [not null, ref: > course.course_id]
+
+  indexes {
+    (educator_id, course_id) [pk]
+  }
+}
+
+Table class_course {
+  class_course_id SERIAL [primary key]
+  class_id INT [not null, ref: > class.class_id]
+  course_id INT [not null, ref: > course.course_id]
+  educator_id INT [not null, ref: > educator.educator_id]
+  start_date DATE
+  end_date DATE
+}
