@@ -2,8 +2,6 @@ DROP SCHEMA IF EXISTS yrkesco CASCADE;
 CREATE SCHEMA yrkesco;
 SET search_path TO yrkesco;
 
-
--- EDUCATIONAL LEADER
 CREATE TABLE educational_leader (
     edu_leader_id SERIAL PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
@@ -12,7 +10,6 @@ CREATE TABLE educational_leader (
     phone VARCHAR(20)
 );
 
--- CAMPUS
 CREATE TABLE campus (
     campus_id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -20,14 +17,12 @@ CREATE TABLE campus (
     city VARCHAR(100)
 );
 
--- PROGRAM
 CREATE TABLE program (
     program_id SERIAL PRIMARY KEY,
     program_name VARCHAR(100) NOT NULL,
     description VARCHAR(255)
 );
 
--- COURSE
 CREATE TABLE course (
     course_id SERIAL PRIMARY KEY,
     course_name VARCHAR(100) NOT NULL,
@@ -36,7 +31,6 @@ CREATE TABLE course (
     description VARCHAR(255)
 );
 
--- EDUCATOR
 CREATE TABLE educator (
     educator_id SERIAL PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
@@ -45,7 +39,6 @@ CREATE TABLE educator (
     phone VARCHAR(20)
 );
 
--- CLASS
 CREATE TABLE class (
     class_id SERIAL PRIMARY KEY,
     program_id INT NOT NULL REFERENCES program(program_id),
@@ -53,7 +46,6 @@ CREATE TABLE class (
     educational_leader_id INT NOT NULL REFERENCES educational_leader(edu_leader_id)
 );
 
--- STUDENT
 CREATE TABLE student (
     student_id SERIAL PRIMARY KEY,
     class_id INT NOT NULL REFERENCES class(class_id),
@@ -62,13 +54,11 @@ CREATE TABLE student (
     email VARCHAR(255) UNIQUE NOT NULL
 );
 
--- STUDENT INFO (sensitive)
 CREATE TABLE student_info (
     student_id INT PRIMARY KEY REFERENCES student(student_id),
     social_security_number VARCHAR(12) NOT NULL
 );
 
--- CONSULTANT COMPANY
 CREATE TABLE consultant_company (
     consultant_company_id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -78,27 +68,23 @@ CREATE TABLE consultant_company (
     address VARCHAR(100)
 );
 
--- CONSULTANT (inherits educator_id)
 CREATE TABLE consultant (
     consultant_id INT PRIMARY KEY REFERENCES educator(educator_id),
     consultant_company_id INT NOT NULL REFERENCES consultant_company(consultant_company_id)
 );
 
--- BRIDGE TABLE: program_course
 CREATE TABLE program_course (
     program_id INT NOT NULL REFERENCES program(program_id),
     course_id INT NOT NULL REFERENCES course(course_id),
     PRIMARY KEY (program_id, course_id)
 );
 
--- BRIDGE TABLE: educational_course
 CREATE TABLE educational_course (
     educator_id INT NOT NULL REFERENCES educator(educator_id),
     course_id INT NOT NULL REFERENCES course(course_id),
     PRIMARY KEY (educator_id, course_id)
 );
 
--- BRIDGE TABLE: class_course
 CREATE TABLE class_course (
     class_course_id SERIAL PRIMARY KEY,
     class_id INT NOT NULL REFERENCES class(class_id),
