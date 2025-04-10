@@ -72,3 +72,9 @@ This document describes the process of designing a database model for YrkesCo. I
 <img src = "./yh_labb_assets/physical_diagram.png" width=500>
 
 # Arguing for normalisation
+
+The model satisfies `First Normal Form (1NF)` as all attributes are indivisible and contain only a single value. Primary keys are used to uniquely identify each row. Furthermore, the model avoids redundancy by using relationships instead of duplicating data—many-to-many relationships are handled using bridge tables.
+
+It also fulfills `Second Normal Form (2NF)` by eliminating partial dependencies. Data has been separated into dedicated tables to ensure that all attributes depend solely on their own primary keys. In the bridge tables, all non-key attributes are fully dependent on the entire composite key.
+
+Finally, the model meets the requirements of `Third Normal Form (3NF)` by avoiding transitive dependencies, "non-primary attributes depend on the key, the whole key, and nothing but the key."
