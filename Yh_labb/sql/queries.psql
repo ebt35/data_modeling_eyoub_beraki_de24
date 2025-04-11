@@ -1,0 +1,61 @@
+SET search_path TO yrkesco;
+
+-- 1. List all students with their program and campus
+SELECT s.first_name, s.last_name, p.program_name, c.name AS campus
+FROM student s
+JOIN class cl ON s.class_id = cl.class_id
+JOIN program p ON cl.program_id = p.program_id
+JOIN campus c ON cl.campus_id = c.campus_id;
+
+-- 2. Count students per program
+SELECT p.program_name, COUNT(s.student_id) AS student_count
+FROM program p
+JOIN class cl ON p.program_id = cl.program_id
+JOIN student s ON cl.class_id = s.class_id
+GROUP BY p.program_name;
+
+-- 3. Find courses running in Q1 2024
+SELECT course_name, start_date, end_date 
+FROM class_course cc
+JOIN course c ON cc.course_id = c.course_id
+WHERE start_date BETWEEN '2024-01-01' AND '2024-03-31';
+
+-- 4. Calculate total credits per student
+SELECT s.first_name, s.last_name, SUM(c.credits) AS total_credits
+FROM student s
+JOIN class_course cc ON s.class_id = cc.class_id
+JOIN course c ON cc.course_id = c.course_id
+GROUP BY s.student_id;
+
+-- 5. List educators with their assigned courses and classes
+SELECT e.first_name, e.last_name, c.course_name, cl.class_id
+FROM educator e
+JOIN class_course cc ON e.educator_id = cc.educator_id
+JOIN course c ON cc.course_id = c.course_id
+JOIN class cl ON cc.class_id = cl.class_id;
+
+-- 6. Find students with sensitive info (join with student_info)
+SELECT s.first_name, s.last_name, si.social_security_number
+FROM student s
+JOIN student_info si ON s.student_id = si.student_id;
+
+-- 7. Update student email
+UPDATE student
+SET email = 'new.email@student.edu'
+WHERE student_id = 1;
+
+-- 8. Delete a consultant
+DELETE FROM consultant
+WHERE consultant_id = 3;
+
+-- 9. Find programs with more than 2 courses
+SELECT p.program_name, COUNT(pc.course_id) AS num_courses
+FROM program p
+JOIN program_course pc ON p.program_id = pc.program_id
+GROUP BY p.program_name
+HAVING COUNT(pc.course_id) > 2;
+
+-- 10. List all consultants with company details
+SELECT c.consultant_id, cc.name AS company, cc.hourly_rate
+FROM consultant c
+JOIN consultant_company cc ON c.consultant_company_id = cc.consultant_company_id;
