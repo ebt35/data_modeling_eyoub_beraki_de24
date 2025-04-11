@@ -1,103 +1,108 @@
-DROP SCHEMA IF EXISTS yrkesco CASCADE;
-CREATE SCHEMA yrkesco;
-SET search_path TO yrkesco;
+CREATE SCHEMA IF NOT EXISTS yrkesco;
 
+SET search_path to yrkesco;
 
-CREATE TABLE EducationLeader (
-    leader_id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    phone VARCHAR(20) UNIQUE NOT NULL
+CREATE TABLE educational_leader (
+    edu_leader_id SERIAL PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    phone VARCHAR(20)
 );
 
-CREATE TABLE Campus (
+CREATE TABLE program (
+    program_id SERIAL PRIMARY KEY,
+    program_name VARCHAR(100) NOT NULL,
+    description VARCHAR(255)
+);
+
+CREATE TABLE campus (
     campus_id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    location VARCHAR(255) NOT NULL
+    address VARCHAR(100),
+    city VARCHAR(100)
 );
 
-CREATE TABLE Program (
-    program_id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    leader_id INTEGER NOT NULL REFERENCES EducationLeader(leader_id)
-);
-
-CREATE TABLE Course (
-    course_id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    credits INTEGER NOT NULL CHECK (credits > 0)
-);
-
-CREATE TABLE ProgramCourse (
-    program_id INTEGER NOT NULL REFERENCES Program(program_id),
-    course_id INTEGER NOT NULL REFERENCES Course(course_id),
-    PRIMARY KEY (program_id, course_id)
-);
-
-CREATE TABLE Educator (
-    educator_id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    specialization VARCHAR(100)
-);
-
-CREATE TABLE EducationalCourse (
-    educator_id INTEGER NOT NULL REFERENCES Educator(educator_id),
-    course_id INTEGER NOT NULL REFERENCES Course(course_id),
-    PRIMARY KEY (educator_id, course_id)
-);
-
-CREATE TABLE ConsultantCompany (
-    organization_nr VARCHAR(12) PRIMARY KEY,
-    company_name VARCHAR(100) NOT NULL,
-    f_tax BOOLEAN NOT NULL,
-    phone VARCHAR(20) UNIQUE NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL
-);
-
-CREATE TABLE Consultant (
-    consultant_id SERIAL PRIMARY KEY,
-    educator_id INTEGER NOT NULL REFERENCES Educator(educator_id),
-    organization_nr VARCHAR(12) NOT NULL REFERENCES ConsultantCompany(organization_nr),
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL
-);
-
-CREATE TABLE Class (
+CREATE TABLE class (
     class_id SERIAL PRIMARY KEY,
-    course_id INTEGER NOT NULL REFERENCES Course(course_id),
-    instructor_id INTEGER NOT NULL REFERENCES Educator(educator_id),
-    campus_id INTEGER NOT NULL REFERENCES Campus(campus_id),
-    schedule VARCHAR(100) NOT NULL,
-    room VARCHAR(50) NOT NULL
+    program_id INT NOT NULL,
+    campus_id INT NOT NULL,
+    educational_leader_id INT NOT NULL,
+    FOREIGN KEY (program_id) REFERENCES program(program_id),
+    FOREIGN KEY (campus_id) REFERENCES campus(campus_id),
+    FOREIGN KEY (educational_leader_id) REFERENCES educational_leader(edu_leader_id)
 );
 
-CREATE TABLE ClassCourse (
-    class_id INTEGER NOT NULL REFERENCES Class(class_id),
-    course_id INTEGER NOT NULL REFERENCES Course(course_id),
-    PRIMARY KEY (class_id, course_id)
-);
-
-CREATE TABLE Student (
+CREATE TABLE student (
     student_id SERIAL PRIMARY KEY,
+    class_id INT NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    FOREIGN KEY (class_id) REFERENCES class(class_id)
+);
+
+CREATE TABLE student_info (
+    student_id INT PRIMARY KEY,
+    social_security_number VARCHAR(12),
+    FOREIGN KEY (student_id) REFERENCES student(student_id)
+);
+
+CREATE TABLE course (
+    course_id SERIAL PRIMARY KEY,
+    course_name VARCHAR(100) NOT NULL,
+    course_code VARCHAR(20) NOT NULL,
+    credits INTEGER NOT NULL,
+    description VARCHAR(255)
+);
+
+CREATE TABLE program_course (
+    program_id INT NOT NULL,
+    course_id INT NOT NULL,
+    PRIMARY KEY (program_id, course_id),
+    FOREIGN KEY (program_id) REFERENCES program(program_id),
+    FOREIGN KEY (course_id) REFERENCES course(course_id)
+);
+
+CREATE TABLE educator (
+    educator_id SERIAL PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    phone VARCHAR(20)
+);
+
+CREATE TABLE class_course (
+    class_course_id SERIAL PRIMARY KEY,
+    class_id INT NOT NULL,
+    course_id INT NOT NULL,
+    educator_id INT NOT NULL,
+    start_date DATE,
+    end_date DATE,
+    FOREIGN KEY (class_id) REFERENCES class(class_id),
+    FOREIGN KEY (course_id) REFERENCES course(course_id),
+    FOREIGN KEY (educator_id) REFERENCES educator(educator_id)
+);
+
+CREATE TABLE educational_course (
+    educator_id INT NOT NULL,
+    course_id INT NOT NULL,
+    PRIMARY KEY (educator_id, course_id),
+    FOREIGN KEY (educator_id) REFERENCES educator(educator_id),
+    FOREIGN KEY (course_id) REFERENCES course(course_id)
+);
+
+CREATE TABLE consultant_company (
+    consultant_company_id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    enrollment_date DATE NOT NULL
+    org_number VARCHAR(50) NOT NULL,
+    tax_status BOOLEAN,
+    hourly_rate NUMERIC,
+    address VARCHAR(100)
 );
 
-CREATE TABLE StudentInfo (
-    social_security_nr VARCHAR(12) PRIMARY KEY,
-    student_id INTEGER NOT NULL UNIQUE REFERENCES Student(student_id),
-    address_id INTEGER NOT NULL,
-    phone VARCHAR(20) UNIQUE NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL
-);
-
--- Enrollment (missing in diagram but logically needed)
-CREATE TABLE Enrollment (
-    enrollment_id SERIAL PRIMARY KEY,
-    class_id INTEGER NOT NULL REFERENCES Class(class_id),
-    student_id INTEGER NOT NULL REFERENCES Student(student_id),
-    enrollment_date DATE NOT NULL,
-    UNIQUE(class_id, student_id)
+CREATE TABLE consultant (
+    consultant_id SERIAL PRIMARY KEY,
+    consultant_company_id INT NOT NULL,
+    FOREIGN KEY (consultant_company_id) REFERENCES consultant_company(consultant_company_id)
 );
