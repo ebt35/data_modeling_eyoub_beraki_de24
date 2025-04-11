@@ -1,0 +1,55 @@
+SET search_path to yrkesco;
+
+INSERT INTO educational_leader (first_name, last_name, email, phone) VALUES
+('Sarah', 'Johnson', 'sarah.j@edu.com', '555-1234'),
+('Michael', 'Chen', 'michael.c@edu.com', '555-5678');
+
+INSERT INTO campus (name, address, city) VALUES
+('Downtown Campus', '456 Learning Ave', 'Tech City'),
+('Online Campus', 'Virtual 001', 'Digital Space');
+
+INSERT INTO program (program_name, description) VALUES
+('Data Science', 'MSc in Data Analytics'),
+('Business Admin', 'MBA Program');
+
+INSERT INTO consultant_company (name, org_number, tax_status, hourly_rate, address) VALUES
+('TechEd Consultants', 'ORG-789', TRUE, 150.00, '789 Advisor Rd'),
+('EduStrategies', 'ORG-456', TRUE, 200.00, '321 Guidance St');
+
+INSERT INTO course (course_name, course_code, credits, description) VALUES
+('Database Systems', 'CS101', 3, 'Fundamentals of DBMS'),
+('Machine Learning', 'DS201', 4, 'Intro to ML algorithms'),
+('Leadership', 'BA301', 2, 'Management skills'),
+('Statistics', 'ST101', 3, 'Basic statistical methods');
+
+INSERT INTO educator (first_name, last_name, email, phone) VALUES
+('Emily', 'Wilson', 'emily.w@edu.com', '555-1122'),
+('David', 'Brown', 'david.b@edu.com', '555-3344');
+
+INSERT INTO class (program_id, campus_id, educational_leader_id) VALUES
+(1, 2, 2),
+(2, 3, 3),
+(1, 1, 1);
+
+INSERT INTO student (class_id, first_name, last_name, email) VALUES
+(1, 'Bob', 'Johnson', 'bob.j@student.edu'),
+(2, 'Carol', 'Davis', 'carol.d@student.edu'),
+(3, 'Dave', 'Wilson', 'dave.w@student.edu');
+
+INSERT INTO student_info (student_id, social_security_number) VALUES
+(2, 'SSN-5678'),
+(3, 'SSN-9012'),
+(4, 'SSN-3456');
+
+INSERT INTO program_course (program_id, course_id) VALUES
+(1, 1), (1, 2), (1, 4),
+(2, 3), (2, 4);
+
+INSERT INTO class_course (class_id, course_id, educator_id, start_date, end_date) VALUES
+(1, 1, 1, '2024-01-10', '2024-05-15'),
+(1, 2, 2, '2024-01-10', '2024-05-15'),
+(2, 3, 1, '2024-02-01', '2024-06-30');
+
+INSERT INTO consultant (consultant_company_id) VALUES
+(1), (1), (2);
+
