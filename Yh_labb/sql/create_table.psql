@@ -2,7 +2,53 @@ CREATE SCHEMA IF NOT EXISTS yrkesco;
 
 SET search_path to yrkesco;
 
-CREATE TABLE educational_leader (
+
+CREATE TABLE Program (
+    program_id SERIAL PRIMARY KEY,
+    program_name VARCHAR(100) NOT NULL,
+    description VARCHAR(255)
+);
+
+CREATE TABLE Course (
+    course_id SERIAL PRIMARY KEY,
+    course_name VARCHAR(100) NOT NULL,
+    course_code VARCHAR(20) NOT NULL,
+    credits INTEGER NOT NULL,
+    description VARCHAR(255)
+);
+
+CREATE TABLE ProgramCourse (
+    program_id INT NOT NULL,
+    course_id INT NOT NULL,
+    PRIMARY KEY (program_id, course_id),
+    FOREIGN KEY (program_id) REFERENCES Program(program_id),
+    FOREIGN KEY (course_id) REFERENCES Course(course_id)
+);
+
+CREATE TABLE Educator (
+    educator_id SERIAL PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    phone VARCHAR(20)
+);
+
+CREATE TABLE EducationalCourse (
+    educator_id INT NOT NULL,
+    course_id INT NOT NULL,
+    PRIMARY KEY (educator_id, course_id),
+    FOREIGN KEY (educator_id) REFERENCES Educator(educator_id),
+    FOREIGN KEY (course_id) REFERENCES Course(course_id)
+);
+
+CREATE TABLE Campus (
+    campus_id SERIAL PRIMARY KEY,
+    name VARCHAR(100),
+    address VARCHAR(100),
+    city VARCHAR(100)
+);
+
+CREATE TABLE EducationalLeader (
     edu_leader_id SERIAL PRIMARY KEY,
     first_name VARCHAR(50),
     last_name VARCHAR(50),
@@ -10,14 +56,39 @@ CREATE TABLE educational_leader (
     phone VARCHAR(20)
 );
 
-CREATE TABLE campus (
-    campus_id SERIAL PRIMARY KEY,
-    name VARCHAR(100),
-    address VARCHAR(100),
-    city VARCHAR(100)
+CREATE TABLE Class (
+    class_id SERIAL PRIMARY KEY,
+    program_id INT REFERENCES Program(program_id),
+    campus_id INT REFERENCES Campus(campus_id),
+    educational_leader_id INT REFERENCES EducationalLeader(edu_leader_id)
 );
 
-CREATE TABLE consultant_company (
+CREATE TABLE ClassCourse (
+    class_course_id SERIAL PRIMARY KEY,
+    class_id INT,
+    course_id INT,
+    educator_id INT,
+    start_date DATE,
+    end_date DATE,
+    FOREIGN KEY (class_id) REFERENCES Class(class_id),
+    FOREIGN KEY (course_id) REFERENCES Course(course_id),
+    FOREIGN KEY (educator_id) REFERENCES Educator(educator_id)
+);
+
+CREATE TABLE Student (
+    student_id SERIAL PRIMARY KEY,
+    class_id INT REFERENCES Class(class_id),
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    email VARCHAR(255) UNIQUE
+);
+
+CREATE TABLE StudentInfo (
+    student_id INT PRIMARY KEY REFERENCES Student(student_id),
+    social_security_number VARCHAR(12)
+);
+
+CREATE TABLE ConsultantCompany (
     consultant_company_id SERIAL PRIMARY KEY,
     name VARCHAR(100),
     org_number VARCHAR(50),
@@ -26,65 +97,7 @@ CREATE TABLE consultant_company (
     address VARCHAR(100)
 );
 
-CREATE TABLE course (
-    course_id SERIAL PRIMARY KEY,
-    course_name VARCHAR(100),
-    course_code VARCHAR(20),
-    credits INTEGER,
-    description VARCHAR(255)
-);
-
-CREATE TABLE educator (
-    educator_id SERIAL PRIMARY KEY,
-    first_name VARCHAR(50),
-    last_name VARCHAR(50),
-    email VARCHAR(255) UNIQUE,
-    phone VARCHAR(20)
-);
-
-CREATE TABLE program (
-    program_id SERIAL PRIMARY KEY,
-    program_name VARCHAR(100),
-    description VARCHAR(255)
-);
-
-CREATE TABLE class (
-    class_id SERIAL PRIMARY KEY,
-    program_id INTEGER REFERENCES program(program_id),
-    campus_id INTEGER REFERENCES campus(campus_id),
-    educational_leader_id INTEGER REFERENCES educational_leader(edu_leader_id)
-);
-
-CREATE TABLE student (
-    student_id SERIAL PRIMARY KEY,
-    class_id INTEGER REFERENCES class(class_id),
-    first_name VARCHAR(50),
-    last_name VARCHAR(50),
-    email VARCHAR(255) UNIQUE
-);
-
-CREATE TABLE student_info (
-    student_id INTEGER PRIMARY KEY REFERENCES student(student_id),
-    social_security_number VARCHAR(12)
-);
-
-CREATE TABLE program_course (
-    program_id INTEGER REFERENCES program(program_id),
-    course_id INTEGER REFERENCES course(course_id),
-    PRIMARY KEY (program_id, course_id)
-);
-
-CREATE TABLE class_course (
-    class_course_id SERIAL PRIMARY KEY,
-    class_id INTEGER REFERENCES class(class_id),
-    course_id INTEGER REFERENCES course(course_id),
-    educator_id INTEGER REFERENCES educator(educator_id),
-    start_date DATE,
-    end_date DATE
-);
-
-CREATE TABLE consultant (
+CREATE TABLE Consultant (
     consultant_id SERIAL PRIMARY KEY,
-    consultant_company_id INTEGER REFERENCES consultant_company(consultant_company_id)
+    consultant_company_id INT REFERENCES ConsultantCompany(consultant_company_id)
 );
-

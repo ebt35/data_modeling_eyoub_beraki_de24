@@ -1,55 +1,92 @@
 SET search_path to yrkesco;
 
-INSERT INTO educational_leader (first_name, last_name, email, phone) VALUES
-('Sarah', 'Johnson', 'sarah.j@edu.com', '555-1234'),
-('Michael', 'Chen', 'michael.c@edu.com', '555-5678');
+INSERT INTO Program (program_name, description) VALUES
+('Data Engineering', 'Program focusing on data systems and pipelines'),
+('Web Development', 'Frontend and backend web programming'),
+('Cybersecurity', 'Focus on networks and data protection'),
+('AI & Machine Learning', 'Build intelligent systems');
 
-INSERT INTO campus (name, address, city) VALUES
-('Downtown Campus', '456 Learning Ave', 'Tech City'),
-('Online Campus', 'Virtual 001', 'Digital Space');
+INSERT INTO Course (course_name, course_code, credits, description) VALUES
+('Intro to SQL', 'SQL101', 5, 'Learn SQL basics'),
+('Advanced JavaScript', 'JS301', 6, 'Deep dive into JavaScript'),
+('Cyber Threat Analysis', 'SEC201', 6, 'Learn to analyze security threats'),
+('Neural Networks', 'AI101', 5, 'Intro to deep learning'),
+('Web API Development', 'WEB202', 4, 'Build RESTful APIs');
 
-INSERT INTO program (program_name, description) VALUES
-('Data Science', 'MSc in Data Analytics'),
-('Business Admin', 'MBA Program');
+INSERT INTO ProgramCourse (program_id, course_id) VALUES
+(1, 1),
+(1, 2),
+(2, 3),
+(3, 4),
+(4, 5),
+(2, 6);
 
-INSERT INTO consultant_company (name, org_number, tax_status, hourly_rate, address) VALUES
-('TechEd Consultants', 'ORG-789', TRUE, 150.00, '789 Advisor Rd'),
-('EduStrategies', 'ORG-456', TRUE, 200.00, '321 Guidance St');
+INSERT INTO Educator (first_name, last_name, email, phone) VALUES
+('Annika', 'Andersson', 'viktor61@swipnet.se', '+46 (0)8 188 422 03'),
+('Mats', 'Svärd', 'janlundqvist@larsson.com', '0229-68 07 06'),
+('Inger', 'Lundström', 'olovwallin@spray.se', '08-698 01 59'),
+('Bo', 'Olofsson', 'olssonjohannes@live.se', '+46 (0)179 564 03'),
+('Elisabet', 'Eriksson', 'eva39@googlemail.com', '012-598 20 81'),
+('Gösta', 'Rosén', 'aandersson@andersson.se', '+46 (0)30 73 52 15'),
+('Gustav', 'Lundin', 'taxelsson@live.se', '001-518 19 27'),
+('Mats', 'Jonsson', 'harvidsson@live.se', '+46 (0)43 71 59 34');
 
-INSERT INTO course (course_name, course_code, credits, description) VALUES
-('Database Systems', 'CS101', 3, 'Fundamentals of DBMS'),
-('Machine Learning', 'DS201', 4, 'Intro to ML algorithms'),
-('Leadership', 'BA301', 2, 'Management skills'),
-('Statistics', 'ST101', 3, 'Basic statistical methods');
+INSERT INTO EducationalCourse (educator_id, course_id) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5);
 
-INSERT INTO educator (first_name, last_name, email, phone) VALUES
-('Emily', 'Wilson', 'emily.w@edu.com', '555-1122'),
-('David', 'Brown', 'david.b@edu.com', '555-3344');
+INSERT INTO Campus (name, address, city) VALUES
+('Stockholm Campus', 'Sveavägen 10', 'Stockholm'),
+('Gothenburg Campus', 'Linnégatan 5', 'Gothenburg');
 
-INSERT INTO class (program_id, campus_id, educational_leader_id) VALUES
-(1, 2, 2),
-(2, 3, 3),
-(1, 1, 1);
+INSERT INTO EducationalLeader (first_name, last_name, email, phone) VALUES
+('Viktor', 'Söderström', 'knorberg@swipnet.se', '0689-65 88 68'),
+('Kerstin', 'Björklund', 'olssonelisabeth@yahoo.de', '08-44 98 09'),
+('Linnéa', 'Ericsson', 'ulfandersson@yahoo.de', '094-289 83 02');
 
-INSERT INTO student (class_id, first_name, last_name, email) VALUES
-(1, 'Bob', 'Johnson', 'bob.j@student.edu'),
-(2, 'Carol', 'Davis', 'carol.d@student.edu'),
-(3, 'Dave', 'Wilson', 'dave.w@student.edu');
+INSERT INTO Class (program_id, campus_id, educational_leader_id) VALUES
+(1, 1, 1),
+(2, 2, 2);
 
-INSERT INTO student_info (student_id, social_security_number) VALUES
-(2, 'SSN-5678'),
-(3, 'SSN-9012'),
-(4, 'SSN-3456');
+INSERT INTO ClassCourse (class_id, course_id, educator_id, start_date, end_date) VALUES
+(1, 1, 1, '2024-09-01', '2024-12-15'),
+(1, 2, 2, '2024-09-01', '2024-12-15'),
+(2, 3, 3, '2024-09-01', '2024-12-15'),
+(2, 4, 4, '2024-09-01', '2024-12-15');
 
-INSERT INTO program_course (program_id, course_id) VALUES
-(1, 1), (1, 2), (1, 4),
-(2, 3), (2, 4);
+INSERT INTO Student (class_id, first_name, last_name, email) VALUES
+(1, 'Linnéa', 'Svensson', 'edvard32@googlemail.com'),
+(1, 'Bengt', 'Oskarsson', 'oandersson@andersson.com'),
+(1, 'Ingrid', 'Olsson', 'karolina75@jansson.com'),
+(1, 'Maria', 'Jonsson', 'berit56@andersson.se'),
+(1, 'Maria', 'Oskarsson', 'anderssongustav@live.se'),
+(1, 'Annette', 'Gustavsson', 'ingabostrom@danielsson.org'),
+(1, 'Emma', 'Lundberg', 'tnilsson@spray.se'),
+(1, 'Eivor', 'Andersson', 'anderssoningrid@fredriksson.com'),
+(1, 'Irma', 'Persson', 'fandersson@gmail.com'),
+(1, 'Elsa', 'Olsson', 'thomas03@nilsson.se'),
+(1, 'Linnéa', 'Holm', 'nordmagnus@hansson.net'),
+(1, 'John', 'Bengtsson', 'nils97@ostlund.com'),
+(1, 'Margaretha', 'Olsson', 'peterwallin@yahoo.de'),
+(1, 'Pia', 'Carlsson', 'gsvensson@petersson.se'),
+(1, 'Åke', 'Holmberg', 'karlssonkristina@swipnet.se');
 
-INSERT INTO class_course (class_id, course_id, educator_id, start_date, end_date) VALUES
-(1, 1, 1, '2024-01-10', '2024-05-15'),
-(1, 2, 2, '2024-01-10', '2024-05-15'),
-(2, 3, 1, '2024-02-01', '2024-06-30');
-
-INSERT INTO consultant (consultant_company_id) VALUES
-(1), (1), (2);
-
+INSERT INTO StudentInfo (student_id, social_security_number) VALUES
+(1, '050120-3376'),
+(2, '040320-5560'),
+(3, '000826-2420'),
+(4, '050129-5976'),
+(5, '010330-0661'),
+(6, '040619-4100'),
+(7, '020809-6271'),
+(8, '001109-5585'),
+(9, '020627-1066'),
+(10, '040210-0416'),
+(11, '050128-6496'),
+(12, '070416-4094'),
+(13, '011020-8261'),
+(14, '040901-0865'),
+(15, '010921-7463');
